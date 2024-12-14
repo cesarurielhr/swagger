@@ -1,0 +1,489 @@
+openapi: 3.0.3
+info:
+  title: API REST WAZA STORE 3.0
+  description: |
+    WAZZA STORE👻👅 es un proyecto inspirado en grandes plataformas de comercio electrónico como Mercado Libre, Amazon, AliExpress, entre otras, cuyo objetivo es desarrollar un sistema de carrito de compras. Este sistema permitirá gestionar productos almacenados en una base de datos y facilitará su compra por parte de los clientes, generando facturas a través del uso de APIs y servicios externos.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://carrito-ad9b6ec75796.herokuapp.com/
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://virtserver.swaggerhub.com/CEURHERNANDEZRO/wasaa-apicarrito/1.0.11
+  description: SwaggerHub API Auto Mocking
+- url: https://petstore3.swagger.io/api/v3
+paths:
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      description: Devuelve una lista de todos los usuarios.
+      operationId: usersGET
+      responses:
+        "200":
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Crear un nuevo usuario
+      description: Crea un usuario en la base de datos y también en Facturapi.
+      operationId: usersPOST
+      requestBody:
+        description: Datos del nuevo usuario.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_body'
+      responses:
+        "201":
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-swagger-router-controller: Default
+  /users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      description: Devuelve un único usuario basado en su ID.
+      operationId: usersIdGET
+      parameters:
+      - name: id
+        in: path
+        description: El ID del usuario.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "404":
+          description: Usuario no encontrado
+      x-swagger-router-controller: Default
+  /users/facturapi/{facturapiId}:
+    delete:
+      summary: Eliminar un usuario de MongoDB y Facturapi
+      description: Elimina un usuario de la base de datos MongoDB y de Facturapi.
+      operationId: usersFacturapiFacturapiIdDELETE
+      parameters:
+      - name: facturapiId
+        in: path
+        description: El ID del usuario en Facturapi.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Usuario eliminado exitosamente
+        "404":
+          description: Usuario no encontrado
+      x-swagger-router-controller: Default
+  /products:
+    get:
+      summary: Obtener todos los productos
+      description: Devuelve una lista de todos los productos disponibles.
+      operationId: productsGET
+      responses:
+        "200":
+          description: Lista de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_1'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Crear un nuevo producto
+      description: Crea un nuevo producto y lo almacena en la base de datos.
+      operationId: productsPOST
+      requestBody:
+        description: Datos del nuevo producto.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products_body'
+      responses:
+        "201":
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+      x-swagger-router-controller: Default
+  /products/{id}:
+    get:
+      summary: Obtener un producto por ID
+      description: Devuelve un único producto basado en su ID.
+      operationId: productsIdGET
+      parameters:
+      - name: id
+        in: path
+        description: El ID del producto.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "404":
+          description: Producto no encontrado
+      x-swagger-router-controller: Default
+    put:
+      summary: Actualizar un producto
+      description: Actualiza un producto en la base de datos según el ID proporcionado.
+      operationId: productsIdPUT
+      parameters:
+      - name: id
+        in: path
+        description: El ID del producto.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Datos actualizados del producto.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products_id_body'
+      responses:
+        "200":
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "404":
+          description: Producto no encontrado
+      x-swagger-router-controller: Default
+    delete:
+      summary: Eliminar un producto
+      description: Elimina un producto de la base de datos según su ID.
+      operationId: productsIdDELETE
+      parameters:
+      - name: id
+        in: path
+        description: El ID del producto.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+        "404":
+          description: Producto no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/byUser/{userId}:
+    get:
+      summary: Obtener el carrito de compras de un usuario
+      description: Devuelve el carrito de compras asociado al ID de usuario proporcionado.
+      operationId: shoppingCartByUserUserIdGET
+      parameters:
+      - name: userId
+        in: path
+        description: El ID del usuario.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Carrito de compras encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "404":
+          description: Carrito no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/byId/{cartId}:
+    get:
+      summary: Obtener un carrito de compras por ID
+      description: Devuelve el carrito de compras basado en su ID.
+      operationId: shoppingCartByIdCartIdGET
+      parameters:
+      - name: cartId
+        in: path
+        description: El ID del carrito de compras.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Carrito de compras encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "404":
+          description: Carrito no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/create:
+    post:
+      summary: Crear un nuevo carrito de compras
+      description: Crea un nuevo carrito de compras para el usuario.
+      operationId: shoppingCartCreatePOST
+      responses:
+        "201":
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+      x-swagger-router-controller: Default
+  /shoppingCart/addItem/{cartId}:
+    post:
+      summary: Agregar un producto al carrito de compras
+      description: Añade un producto al carrito de compras especificado.
+      operationId: shoppingCartAddItemCartIdPOST
+      parameters:
+      - name: cartId
+        in: path
+        description: El ID del carrito de compras.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Detalles del producto a agregar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addItem_cartId_body'
+      responses:
+        "200":
+          description: Producto agregado exitosamente
+        "404":
+          description: Carrito o producto no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/removeItem/{cartId}:
+    post:
+      summary: Eliminar un producto del carrito de compras
+      description: Elimina un producto del carrito de compras especificado.
+      operationId: shoppingCartRemoveItemCartIdPOST
+      parameters:
+      - name: cartId
+        in: path
+        description: El ID del carrito de compras.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Detalles del producto a eliminar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/removeItem_cartId_body'
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+        "404":
+          description: Carrito o producto no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/updateItem/{cartId}:
+    post:
+      summary: Actualizar la cantidad de un producto en el carrito
+      description: Actualiza la cantidad de un producto en el carrito de compras especificado.
+      operationId: shoppingCartUpdateItemCartIdPOST
+      parameters:
+      - name: cartId
+        in: path
+        description: El ID del carrito de compras.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Nueva cantidad del producto en el carrito.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateItem_cartId_body'
+      responses:
+        "200":
+          description: Cantidad actualizada exitosamente
+        "404":
+          description: Carrito o producto no encontrado
+      x-swagger-router-controller: Default
+  /shoppingCart/close/{cartId}:
+    post:
+      summary: Cerrar el carrito de compras
+      description: Finaliza el carrito de compras y genera la factura.
+      operationId: shoppingCartCloseCartIdPOST
+      parameters:
+      - name: cartId
+        in: path
+        description: El ID del carrito de compras.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Carrito cerrado exitosamente
+        "404":
+          description: Carrito no encontrado
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      example:
+        name: name
+        id: id
+        email: email
+    users_body:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+      example:
+        price: 0.8008282
+        name: name
+        description: description
+        id: id
+    products_body:
+      required:
+      - name
+      - price
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+    products_id_body:
+      required:
+      - name
+      - price
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+    inline_response_200_2:
+      type: object
+      properties:
+        cartId:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+            example:
+              quantity: 0
+              productId: productId
+      example:
+        cartId: cartId
+        items:
+        - quantity: 0
+          productId: productId
+        - quantity: 0
+          productId: productId
+    inline_response_201:
+      type: object
+      properties:
+        cartId:
+          type: string
+      example:
+        cartId: cartId
+    addItem_cartId_body:
+      required:
+      - productId
+      - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+    removeItem_cartId_body:
+      required:
+      - productId
+      type: object
+      properties:
+        productId:
+          type: string
+    updateItem_cartId_body:
+      required:
+      - productId
+      - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer

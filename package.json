@@ -1,0 +1,20 @@
+{
+  "name": "api-rest-waza-store-3-0",
+  "version": "1.0.11",
+  "description": "WAZZA STORE👻👅 es un proyecto inspirado en grandes plataformas de comercio electrónico como Mercado Libre, Amazon, AliExpress, entre otras, cuyo objetivo es desarrollar un sistema de carrito de compras. Este sistema permitirá gestionar productos almacenados en una base de datos y facilitará su compra por parte de los clientes, generando facturas a través del uso de APIs y servicios externos. ",
+  "main": "index.js",
+  "scripts": {
+	"prestart": "npm install",
+	"start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "oas3-tools": "^2.2.3"
+  }
+}
